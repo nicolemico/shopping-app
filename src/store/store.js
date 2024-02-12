@@ -17,7 +17,7 @@ function reducer(state, action) {
     }
     case 'cart/addToCart': {
       const foundCartItemIndex = state.cart.findIndex(
-        (cartItem) => cartItem.id === action.payload.id,
+        (cartItem) => cartItem.productId === action.payload.productId,
       );
       if (foundCartItemIndex > -1) {
         const cartItem = state.cart[foundCartItemIndex];

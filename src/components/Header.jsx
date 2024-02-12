@@ -19,12 +19,12 @@ export default function Header() {
   return (
     <div className="flex justify-between bg-white border-b p-4">
       <NavLink to="/" className={navLinkClass}>Home</NavLink>
-      <a className="p-2 text-lg px-3 text-orange-400 rounded-md flex group" href="/cart">
+      <NavLink to="/cart" className="p-2 text-lg px-3 text-orange-400 rounded-md flex group">
         <FontAwesomeIcon icon={faCartShopping} className="text-xl group-hover:text-orange-500" />
         <div className="text-[10px] bg-orange-400 text-white group-hover:bg-orange-500 rounded-full w-5 h-4 flex items-center justify-center relative bottom-2">
           {cart.length}
         </div>
-      </a>
+      </NavLink>
     </div>
   );
 }

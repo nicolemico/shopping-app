@@ -25,7 +25,7 @@ export default function ProductList() {
   }, [location.search]);
 
   const handleClickAddCart = (productId) => () => {
-    dispatch({ type: 'cart/addToCart', payload: { id: productId, quantity: 1 } });
+    dispatch({ type: 'cart/addToCart', payload: { productId, quantity: 1 } });
     toast('Item Added to cart', { type: 'success' });
   };
 

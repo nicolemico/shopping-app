@@ -1,36 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { getSingleProduct, getUserCart } from '../../api';
+import { getSingleProduct } from '../../api';
 import StarRating from '../common/StarRating';
 
 export default function CartProductList() {
-  const userId = useSelector((state) => state.userId);
   const cart = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
   const [cartData, setCartData] = useState([]);
-
-  const getCartData = async () => {
-    getUserCart(userId).then((cartResponse) => {
-      dispatch({ type: 'cart/setCart', payload: cartResponse.products });
-    });
-  };
-
-  const getCartProductsData = async () => {
-    const request = cart.map((cartItem) => getSingleProduct(cartItem.productId));
-    const response = await Promise.all(request);
-    let productData = response.map((responseObj) => responseObj.data);
-
-    // map product quantity to cartData
-    productData = productData.map((product) => {
-      const cartProduct = cart.find((cartItem) => cartItem.productId === product.id);
-      const productClone = product;
-      productClone.quantity = cartProduct.quantity;
-      return productClone;
-    });
-    setCartData(productData);
-  };
 
   const handleChangeQuantity = (type, productId) => {
     setCartData(cartData.map((product) => {
@@ -51,14 +28,26 @@ export default function CartProductList() {
   };
 
   useEffect(() => {
-    getCartData();
-  }, []);
+    const getCartProductsData = async () => {
+      const request = cart.map((cartItem) => getSingleProduct(cartItem.productId));
+      const response = await Promise.all(request);
+      let productData = response.map((responseObj) => responseObj.data);
 
-  useEffect(() => {
+      // map product quantity to cartData
+      productData = productData.map((product) => {
+        const cartProduct = cart.find((cartItem) => cartItem.productId === product.id);
+        const productClone = product;
+        productClone.quantity = cartProduct.quantity;
+        return productClone;
+      });
+      setCartData(productData);
+    };
+
     if (cart.length > 0) {
       getCartProductsData();
     }
   }, [cart]);
+
   return (
     <ul className="flex flex-col gap-6">
       { cartData.map((product) => (
